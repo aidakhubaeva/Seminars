@@ -1,0 +1,246 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+.app-container {
+    background-color: #111111;
+    padding: 20px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-wrapper {
+    max-width: 1200px;
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+
+.text {
+    margin: 0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.title {
+    font-size: 2em;
+    color: #f8f8f8;
+    text-align: left;
+    margin: 30px 0;
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 50px;
+    max-width: 1200px;
+    margin: 20px auto;
+    align-items: start;
+    padding-bottom: 50px;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px;
+    border-radius: 20px;
+    color: #2b2b2b;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    overflow: hidden;
+    background-color: white;
+    transform-origin: center;
+    will-change: transform;
+    min-height: 400px;
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    margin-bottom: -10px;
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.card:hover .card-image {
+    transform: scale(1.02);
+}
+
+.card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 0;
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    color: #333;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+}
+
+.card-description {
+    font-size: 14px;
+    color: #555;
+    position: relative;
+    max-height: 3.6em;
+    line-height: 1.2em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: max-height 0.4s ease;
+}
+
+.card:hover .card-description {
+    white-space: normal;
+    max-height: none;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 5px;
+    border-radius: 5px;
+    z-index: 10;
+}
+
+.card-date-time {
+    font-size: 0.7rem;
+    font-weight: 200;
+    color: #6ea4df;
+    margin-top: auto;
+}
+
+.button-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.button {
+    border: none;
+    border-radius: 15px;
+    padding: 6px;
+    background-color: #e7e8e9;
+    color: #888888;
+    width: 40%;
+    text-transform: lowercase;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.edit-button {
+    background-color: #bedbf8;
+    color: #888888;
+}
+
+.delete-button {
+    background-color: #212122;
+    color: #ffffff;
+}
+
+.delete-button:hover {
+    background-color: #d5d9db;
+}
+
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 400px;
+    max-width: 90%;
+}
+
+.modal-title {
+    margin: 0 0 20px 5px;
+    font-size: 20px;
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modal-submit,
+.modal-cancel {
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    font-weight: bold;
+}
+
+.modal-submit {
+    background-color: #478bd3;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.modal-submit:hover {
+    background-color: #0056b3;
+}
+
+.modal-cancel {
+    background-color: #ec5c6b;
+    color: white;
+}
+
+.modal-cancel:hover {
+    background-color: #bb4753;
+}
+
+@media (max-width: 1000px) {
+    .app-container {
+        padding: 0;
+
+    }
+}
+
+@media (max-width: 800px) {
+    .app-container {
+        gap: 20px;
+        padding: 0 100px;
+    }
+}
