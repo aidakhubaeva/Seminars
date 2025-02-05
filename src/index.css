@@ -95,7 +95,7 @@ body {
     color: #333;
     min-height: 3rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .card-description {

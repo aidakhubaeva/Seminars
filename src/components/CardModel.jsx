@@ -5,30 +5,27 @@ import Modal from './Modal';
 import '../index.css';
 
 const CardModel = ({ cards, setCards }) => {
+  // Состояние для хранения редактируемой карточки
   const [editingCard, setEditingCard] = useState(null);
+
+  // Состояние для формы редактирования
   const [formData, setFormData] = useState({ title: '', description: '', date: '', time: '' });
 
+  // Удаление карточки с сервера и обновление состояния
   const handleDelete = async (id) => {
-    const confirmed = window.confirm('Вы уверены, что хотите удалить эту карточку?');
-    if (confirmed) {
+    if (window.confirm('Вы уверены, что хотите удалить эту карточку?')) {
       try {
-        const response = await fetch(`http://localhost:3000/cards/${id}`, {
-          method: 'DELETE',
-        });
-
-        if (response.ok) {
-          setCards((prevCards) => prevCards.filter((card) => card.id !== id));
-        } else {
-          console.error('Ошибка при удалении карточки');
-        }
+        await axios.delete(`http://localhost:3000/cards/${id}`);
+        setCards((prevCards) => prevCards.filter((card) => card.id !== id)); // Удаление карточки из состояния
       } catch (error) {
-        console.error('Ошибка при подключении к серверу:', error);
+        console.error('Ошибка при удалении карточки:', error); // Обработка ошибок при удалении
       }
     }
   };
 
+  // Открытие модального окна для редактирования карточки
   const handleEdit = (card) => {
-    setEditingCard(card);
+    setEditingCard(card); // Устанавливаем текущую карточку для редактирования
     setFormData({
       title: card.title,
       description: card.description,
@@ -37,86 +34,45 @@ const CardModel = ({ cards, setCards }) => {
     });
   };
 
+  // Обработчик изменений в полях формы
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prevData) => ({ ...prevData, [name]: value })); // Обновление данных формы
   };
 
-  const formatDate = (date) => {
-    const [year, month, day] = date.split('-');
-    return `${day}.${month}.${year}`; // Преобразование в формат DD.MM.YYYY
-  };
-  
+  // Отправка обновленных данных на сервер
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    const updatedData = {
-      ...editingCard,
-      ...formData,
-      date: formatDate(formData.date), // Форматирование даты
-    };
-  
+    const updatedData = { ...editingCard, ...formData }; // Объединение старых и новых данных
+
     try {
       const response = await axios.put(`http://localhost:3000/seminars/${editingCard.id}`, updatedData);
-  
       if (response.status === 200) {
-        const updatedCard = response.data;
         setCards((prevCards) =>
-          prevCards.map((card) => (card.id === updatedCard.id ? updatedCard : card))
+          prevCards.map((card) => (card.id === response.data.id ? response.data : card)) // Обновление данных карточки в состоянии
         );
-        setEditingCard(null);
-      } else {
-        console.error('Ошибка при обновлении карточки');
+        setEditingCard(null); // Закрытие модального окна после успешного редактирования
       }
     } catch (error) {
-      console.error('Ошибка при подключении к серверу:', error);
+      console.error('Ошибка при обновлении карточки:', error); // Обработка ошибок при обновлении
     }
   };
 
   return (
     <div className="card-grid">
+      {/* Отображение списка карточек */}
       {cards.map((card) => (
         <Card key={card.id} card={card} onEdit={handleEdit} onDelete={handleDelete} />
       ))}
 
-      <Modal isOpen={!!editingCard} onClose={() => setEditingCard(null)}>
-        <h2 className="modal-title text">Редактировать карточку</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="title"
-            className="modal-input text"
-            value={formData.title}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="description"
-            className="modal-input text"
-            value={formData.description}
-            onChange={handleChange}
-            required
-          ></textarea>
-          <input
-            type="date"
-            name="date"
-            className="modal-input text"
-            value={formData.date}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="time"
-            name="time"
-            className="modal-input text"
-            value={formData.time}
-            onChange={handleChange}
-            required
-          />
-          <button type="submit" className="modal-submit text">Сохранить</button>
-          <button type="" className="modal-cancel text" onClick={() => setEditingCard(null)}>Отмена</button>
-        </form>
-      </Modal>
+      {/* Модальное окно для редактирования карточки */}
+      <Modal
+        isOpen={!!editingCard}
+        onClose={() => setEditingCard(null)}
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
     </div>
   );
 };
